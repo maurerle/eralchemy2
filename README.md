@@ -75,6 +75,13 @@ from eralchemy2 import render_er
 ## Draw from SQLAlchemy base
 render_er(Base, 'erd_from_sqlalchemy.png')
 
+## Or draw from SQLAlchemy metadata
+metadata = mapper_registry.metadata
+render_er(metadata, 'erd_from_sqlalchemy.png')
+
+## You can also generate Mermaid ER and render it easily in markdown
+render_er(metadata, "mermaid_erd.md", mode="mermaid_er")
+
 ## Draw from database
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
