@@ -1,9 +1,10 @@
-FROM ubuntu:24.04
+FROM python:3.12.4-slim
 
-WORKDIR /app/eralchemy2
+RUN apt update && apt install --no-install-recommends -y build-essential gcc graphviz libgraphviz-dev libpq-dev \
+&& pip3 install mysql-connector-python psycopg2 sqlalchemy pygraphviz eralchemy2 \
+&& apt-get purge -y build-essential libgraphviz-dev gcc \
+&& apt-get autoremove -y \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/root/.local/bin:${PATH}"
-
-RUN apt-get update && apt-get install -y python3 python3-pip pipx graphviz libgraphviz-dev && pipx install eralchemy2
-
-CMD ["eralchemy2"]
+CMD ["eralchemy2", "-h"]
