@@ -86,6 +86,21 @@ render_er(metadata, "mermaid_erd.md", mode="mermaid_er")
 render_er("sqlite:///relative/path/to/db.db", 'erd_from_sqlite.png')
 ```
 
+### Usage from a container
+
+You can build a container image by installing a container runtime like Docker, so you don´t need to install any other dependency.
+
+In the following example you will:
+- create a container image with the name of eralchemy2-container
+- create and run a container instance that will be deleted after running
+- expose a volume in your current working directory
+- run eralchemy2 inside the container that will generate a PDF file on a directory which is mirrored to your current working directory
+
+1) To create the container image just do: `docker build . -t eralchemy2-container`
+2) To instantiate the container image: `docker run --rm -v $PWD:/app/eralchemy2/ eralchemy2-container eralchemy2 -i "postgresql+psycopg2://user:pass@postgres:5432/database" -o /app/eralchemy2/diagram.pdf`
+
+Note that the container image also has the MySQL drivers installed, so you can also connect to a MySQL database to build a diagram
+
 ## Architecture
 ![Architecture schema](https://raw.githubusercontent.com/maurerle/eralchemy2/main/eralchemy_architecture.png?raw=true "Architecture schema")
 
