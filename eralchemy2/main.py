@@ -155,13 +155,16 @@ def intermediary_to_schema(tables, relationships, output, title=""):
 
 def intermediary_to_puml(tables, relationships, output, title=""):
     """Saves the intermediary representation to PlantUML."""
-    puml_markup = _intermediary_to_puml(tables, relationships)
+    puml_markup = _intermediary_to_puml(tables, relationships,title)
+    if title:
+        puml_markup=f"title {title}\n {puml_markup}"
     if __has_plantuml:
         markup_encoded =plantuml.deflate_and_encode(puml_markup)
-        # puml_markup += f"![](https://mermaid.ink/img/{markup_encoded})\n"
+        puml_markup += f"\n'[](https://mermaid.ink/img/{markup_encoded})"
+    puml_markup=f"@startuml\n{puml_markup}\n@enduml"
     with open(output, "w") as file_out:
         file_out.write(puml_markup)
-
+        
 def _intermediary_to_markdown(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_markdown() for t in tables)
@@ -184,7 +187,9 @@ def _intermediary_to_mermaid_er(tables, relationships):
 
 
 def _intermediary_to_dot(tables, relationships, title=""):
-    """Returns the dot source representing the database in a string."""
+    """
+    Returns the dot source representing the database in a string.
+    """
     t = "\n".join(t.to_dot() for t in tables)
     r = "\n".join(r.to_dot() for r in relationships)
 
@@ -201,7 +206,7 @@ def _intermediary_to_puml(tables, relationships):
     """Returns the er markup source in a string."""
     t = "\n".join(t.to_puml() for t in tables)
     r = "\n".join(r.to_puml() for r in relationships)
-    return f"@startuml\n{t}\n{r}\n@enduml"
+    return f"{t}\n{r}"
 
 # Routes from the class name to the function transforming this class in
 # the intermediary representation.
