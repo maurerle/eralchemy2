@@ -155,7 +155,7 @@ def intermediary_to_schema(tables, relationships, output, title=""):
 
 def intermediary_to_puml(tables, relationships, output, title=""):
     """Saves the intermediary representation to PlantUML."""
-    puml_markup = _intermediary_to_puml(tables, relationships,title)
+    puml_markup = _intermediary_to_puml(tables, relationships)
     if title:
         puml_markup=f"title {title}\n {puml_markup}"
     if __has_plantuml:
@@ -237,8 +237,8 @@ switch_output_mode = {
     "er": intermediary_to_markdown,
     "md": intermediary_to_mermaid,
     "dot": intermediary_to_dot,
-    "dot": intermediary_to_dot,
     "puml":intermediary_to_puml,
+    "uml":intermediary_to_puml,
 }
 
 
