@@ -160,7 +160,9 @@ def intermediary_to_puml(tables, relationships, output, title=""):
         puml_markup=f"title {title}\n {puml_markup}"
     if __has_plantuml:
         markup_encoded =plantuml.deflate_and_encode(puml_markup)
-        puml_markup += f"\n'[](https://mermaid.ink/img/{markup_encoded})"
+        puml_markup +=(
+            f"\nfooter [[https://www.plantuml.com/plantuml/svg/{markup_encoded}"
+            "{link to PlantUML server} Link to PlantUML server]]")
     puml_markup=f"@startuml\n{puml_markup}\n@enduml"
     with open(output, "w") as file_out:
         file_out.write(puml_markup)
