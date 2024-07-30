@@ -136,7 +136,7 @@ class Column(Drawable):
             self.name,
             self.type.replace("(", "<").replace(")", ">"),
             " NOT NULL" if not self.is_null else "",
-            "\n---" if self.key_symbol else ""
+            "\n--" if self.key_symbol else ""
         )
 
 class Relation(Drawable):
