@@ -27,6 +27,9 @@ class Drawable(ABC):
         """Transforms the intermediary object to it's syntax in the dot format."""
         raise NotImplementedError()
 
+    def to_puml(self) -> str:
+        """Transforms the intermediary object to it's syntax in the PlantUML format."""
+
     def __eq__(self, other) -> bool:
         return self.__dict__ == other.__dict__
 
@@ -37,7 +40,6 @@ class Drawable(ABC):
 
     def __str__(self) -> str:
         return self.to_markdown()
-
 
 def sanitize_mermaid(text: str, *, is_er: bool = False):
     RE = re.compile("[^0-9a-zA-Z_-]+")
@@ -128,6 +130,14 @@ class Column(Drawable):
             null=" NOT NULL" if not self.is_null else "",
         )
 
+    def to_puml(self) -> str:
+        return " {} {} : {}{}{}".format(
+            self.key_symbol,
+            self.name,
+            self.type.replace("(", "<").replace(")", ">"),
+            " NOT NULL" if not self.is_null else "",
+            "\n--" if self.key_symbol else ""
+        )
 
 class Relation(Drawable):
     """Represents a Relation in the intermediaty syntax"""
@@ -221,6 +231,14 @@ class Relation(Drawable):
             ",".join(cards),
         )
 
+    def to_puml(self) -> str:
+        __puml_left_cardinalities = {"*": "}o", "?": "|o", "+": "}1", "1": "||", "": None}
+        __puml_right_cardinalities = {"*": "o{", "?": "o|", "+": "1{", "1": "||", "": None}
+
+        return (f"{self.left_col} "
+                f" {__puml_left_cardinalities[self.left_cardinality]}--{__puml_right_cardinalities[self.right_cardinality]} "
+                f"{self.right_col}")
+
     def __eq__(self, other: object) -> bool:
         if super().__eq__(other):
             return True
@@ -280,6 +298,11 @@ class Table(Drawable):
     def to_dot(self) -> str:
         body = "".join(c.to_dot() for c in self.columns)
         return TABLE.format(self.name, self.header_dot, body)
+
+    def to_puml(self) -> str:
+        columns = [c.to_puml() for c in self.columns]
+        name = sanitize_mermaid(self.name)
+        return f"entity  {name}{{\n" + "\n  ".join(columns) + "\n}"
 
     def __str__(self) -> str:
         return self.header_markdown
