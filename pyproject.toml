@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eralchemy2"
-version = "1.4.1"
+version = "1.4.2"
 description = "Simple entity relation (ER) diagrams generation"
 authors = [{ name = "Florian Maurer", email = "fmaurer@disroot.org"}]
 license = {text = "Apache-2.0"}
@@ -14,7 +14,7 @@ readme = "README.md"
 keywords = ["sql", "ORM", "relational databases", "ER diagram", "render"]
 
 classifiers=[
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering :: Visualization",
@@ -23,8 +23,7 @@ classifiers=[
 ]
 requires-python = ">=3.8"
 dependencies = [
-  "sqlalchemy >= 1.4",
-  "pygraphviz >= 1.9",
+  "eralchemy[pygraphviz] >= 1.5.0"
 ]
 
 [project.urls]
